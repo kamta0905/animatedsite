@@ -10,8 +10,11 @@ import Home from "./Home";
 
 function App() {
   const UserContext = createContext();
+  const [index, setIndex] = useState(null)
   const [theme, setTheme] = useState(true);
-  const [tone, setTone] = useState(null)
+  const [tone1, setTone1] = useState(false)
+  const [tone2, setTone2] = useState(true)
+  const [alltone, setAlltone] = useState(false);
   const [dot, setDot] = useState(1);
   const [sound, setSound] = useState(false);
   const [bounce, setBounce] = useState(null);
@@ -31,9 +34,45 @@ function App() {
   }
 
   const audio = new Audio(ringer);
-  audio.loop = true
+  audio.loop = tone2
   const afteraudio = new Audio(after);
-  afteraudio.loop = true
+  afteraudio.loop = tone1
+
+  function handleSound() {
+    setTone1(!tone1)
+    if (tone1 === true) {
+      setTone2(true)
+    }
+    else {
+      setTone2(false)
+    }
+    if (audio.loop === true) {
+      audio.play()
+      audio.loop = false;
+    }
+    else {
+      afteraudio.play()
+      afteraudio.loop = false;
+    }
+  }
+
+  useEffect(() => {
+    if (tone2) {
+      setAlltone(true)
+    }
+    else {
+      setAlltone(false)
+    }
+  });
+  function handleAlltone() {
+    if (alltone === true) {
+      audio.play()
+      audio.loop = false;
+    }
+  }
+
+
+
 
 
 
@@ -45,6 +84,7 @@ function App() {
           <div className="container">
             <NavLink exact to="/"><button onClick={() => {
               handleDot(1)
+              handleAlltone()
               handleBounce()
             }} className={bounce && dot === 1 ? "button-css-after" : "button-css"}>
               <svg height="24" width="24" viewBox="0 0 24 24" fill="none">
@@ -57,6 +97,7 @@ function App() {
             </NavLink>
             <NavLink exact to="/projects"><button onClick={() => {
               handleDot(2)
+              handleAlltone()
               handleBounce()
             }} className={dot === 2 && bounce ? "button-css-after" : "button-css"}>
               <svg height="24" width="24" viewBox="0 0 24 24" fill="none">
@@ -69,6 +110,7 @@ function App() {
             </NavLink>
             <NavLink exact to="/writting"> <button onClick={() => {
               handleDot(3)
+              handleAlltone()
               handleBounce()
             }} className={dot === 3 && bounce ? "button-css-after" : "button-css"}>
               <svg height="24" width="24" viewBox="0 0 24 24" fill="none">
@@ -81,6 +123,7 @@ function App() {
             </NavLink>
             <NavLink exact to="/photos"> <button onClick={() => {
               handleDot(4)
+              handleAlltone()
               handleBounce()
             }} className={dot === 4 && bounce ? "button-css-after" : "button-css"}>
               <svg height="24" width="24" viewBox="0 0 24 24" fill="none">
@@ -93,6 +136,7 @@ function App() {
             </NavLink>
             <NavLink exact to="/words"> <button onClick={() => {
               handleDot(5)
+              handleAlltone()
               handleBounce()
             }} className={dot === 5 && bounce ? "button-css-after" : "button-css"}>
               <svg height="24" width="24" viewBox="0 0 24 24" fill="none">
@@ -126,6 +170,7 @@ function App() {
             <button onClick={() => {
               handleDot(7)
               ThemeChanger()
+              handleAlltone()
               handleBounce()
             }} className={bounce && dot === 7 ? "button-css-after" : "button-css"}>
               <svg className={theme ? "svgtheme" : "themechanges"} viewBox="0 0 24 24" fill="none" >
@@ -162,10 +207,7 @@ function App() {
             </svg> */}
             </button>
             <button className="button-css" onClick={() => {
-              audio.loop = true;
-              audio.play();
-              (audio.loop = false)
-
+              handleSound(9)
               handleDot(8)
               setSound(!sound)
               handleBounce()
